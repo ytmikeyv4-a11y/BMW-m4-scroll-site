@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Frame paths
   const getRevealPath = (i) => `frames_reveal/frame_${String(i).padStart(6, '0')}.jpg`;
   const getArenaPath = (i) => `frames_arena/frame_${String(i).padStart(6, '0')}.jpg`;
-  const getStudioPath = (i) => `frames/frame_${String(i).padStart(6, '0')}.png`;
+  const getStudioPath = (i) => `frames/frame_${String(i).padStart(6, '0')}.jpg`;
 
   
 
@@ -216,42 +216,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (loadedCount === 25 && !window.initialDrawn) {
       window.initialDrawn = true;
-      renderCurrentState();
+      renderCurrentState(true);
     }
+  };
+
+  // Helper for background image preloading and async decode
+  const createPreloadImg = (path) => {
+    const img = new Image();
+    img.src = path;
+    img.onload = () => {
+      onAssetLoaded();
+      if ('decode' in img) img.decode().catch(() => {});
+    };
+    img.onerror = onAssetLoaded;
+    return img;
   };
 
   // Preload Reveal Frames (Chapter 1)
   for (let i = 0; i < REVEAL_COUNT; i++) {
-    const img = new Image();
-    img.src = getRevealPath(i);
-    img.onload = onAssetLoaded;
-    img.onerror = onAssetLoaded;
-    revealImages.push(img);
+    revealImages.push(createPreloadImg(getRevealPath(i)));
   }
 
   // Preload Arena Drift Frames (Chapter 2)
   for (let i = 0; i < ARENA_COUNT; i++) {
-    const img = new Image();
-    img.src = getArenaPath(i);
-    img.onload = onAssetLoaded;
-    img.onerror = onAssetLoaded;
-    arenaImages.push(img);
+    arenaImages.push(createPreloadImg(getArenaPath(i)));
   }
 
-  // Preload Studio Frames (Chapter 3)
+  // Preload Studio Frames (Chapter 3) - Optimized Hardware-Accelerated JPGs
   for (let i = 0; i < STUDIO_COUNT; i++) {
-    const img = new Image();
-    img.src = getStudioPath(i);
-    img.onload = onAssetLoaded;
-    img.onerror = onAssetLoaded;
-    studioImages.push(img);
+    studioImages.push(createPreloadImg(getStudioPath(i)));
   }
 
   /* --------------------------------------------------------------------------
-     2. QUAD-SEQUENCE CANVAS RENDERING ENGINE
+     2. QUAD-SEQUENCE CANVAS RENDERING ENGINE (OPTIMIZED WITH DIRTY-CHECK)
      -------------------------------------------------------------------------- */
   let currentChapter = 1; // 1 = Reveal, 2 = Arena, 3 = Drift, 4 = Studio
   let currentFrameIdx = 0;
+  let lastRenderedChapter = -1;
+  let lastRenderedFrameIdx = -1;
 
   const resizeCanvas = () => {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -260,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.scale(dpr, dpr);
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
-    renderCurrentState();
+    renderCurrentState(true);
   };
 
   const drawFittedImage = (img, imgAspect) => {
@@ -269,8 +271,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const w = window.innerWidth;
     const h = window.innerHeight;
     ctx.clearRect(0, 0, w, h);
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
 
     const screenAspect = w / h;
     let drawW, drawH, drawX, drawY;
@@ -290,7 +290,13 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.drawImage(img, drawX, drawY, drawW, drawH);
   };
 
-  const renderCurrentState = () => {
+  const renderCurrentState = (force = false) => {
+    if (!force && currentChapter === lastRenderedChapter && currentFrameIdx === lastRenderedFrameIdx) {
+      return; // Skip redundant draw call if frame has not changed
+    }
+    lastRenderedChapter = currentChapter;
+    lastRenderedFrameIdx = currentFrameIdx;
+
     if (currentChapter === 1) {
       const img = revealImages[currentFrameIdx] || revealImages[0];
       drawFittedImage(img, 1920 / 1012);
@@ -309,7 +315,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* --------------------------------------------------------------------------
-     4. UNIFIED SCROLL JOURNEY & STORYLINE SWITCHER
+     4. UNIFIED SCROLL JOURNEY & STORYLINE SWITCHER (DIRTY-CHECKED)
      -------------------------------------------------------------------------- */
   const hudChapter = document.getElementById("hudChapter");
   const hudVelocity = document.getElementById("hudVelocity");
@@ -324,77 +330,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const secStudioSpecs = document.getElementById("sec-studio-specs");
   const secCta = document.getElementById("sec-cta");
 
+  let activeSectionIdx = -1;
+  const storySections = [
+    secRevealIntro,
+    secRevealFitment,
+    secArenaIntro,
+    secArenaTelemetry,
+    secStudioIntro,
+    secStudioSpecs,
+    secCta
+  ];
+
   function updateStorySections(p) {
-    // Act 1 Reveal Intro: 0% to 10%
-    if (p < 0.10) {
-      secRevealIntro.classList.add("active");
-      secRevealFitment.classList.remove("active");
-      secArenaIntro.classList.remove("active");
-      secArenaTelemetry.classList.remove("active");
-      secStudioIntro.classList.remove("active");
-      secStudioSpecs.classList.remove("active");
-      secCta.classList.remove("active");
-    }
-    // Act 1 Reveal Fitment: 10% to 20%
-    else if (p >= 0.10 && p < 0.20) {
-      secRevealIntro.classList.remove("active");
-      secRevealFitment.classList.add("active");
-      secArenaIntro.classList.remove("active");
-      secArenaTelemetry.classList.remove("active");
-      secStudioIntro.classList.remove("active");
-      secStudioSpecs.classList.remove("active");
-      secCta.classList.remove("active");
-    }
-    // Act 2 Arena Intro: 20% to 36%
-    else if (p >= 0.20 && p < 0.36) {
-      secRevealIntro.classList.remove("active");
-      secRevealFitment.classList.remove("active");
-      secArenaIntro.classList.add("active");
-      secArenaTelemetry.classList.remove("active");
-      secStudioIntro.classList.remove("active");
-      secStudioSpecs.classList.remove("active");
-      secCta.classList.remove("active");
-    }
-    // Act 2 Arena Telemetry: 36% to 55%
-    else if (p >= 0.36 && p < 0.55) {
-      secRevealIntro.classList.remove("active");
-      secRevealFitment.classList.remove("active");
-      secArenaIntro.classList.remove("active");
-      secArenaTelemetry.classList.add("active");
-      secStudioIntro.classList.remove("active");
-      secStudioSpecs.classList.remove("active");
-      secCta.classList.remove("active");
-    }
-    // Act 3 Studio Intro: 55% to 70%
-    else if (p >= 0.55 && p < 0.70) {
-      secRevealIntro.classList.remove("active");
-      secRevealFitment.classList.remove("active");
-      secArenaIntro.classList.remove("active");
-      secArenaTelemetry.classList.remove("active");
-      secStudioIntro.classList.add("active");
-      secStudioSpecs.classList.remove("active");
-      secCta.classList.remove("active");
-    }
-    // Act 3 Studio Specs: 70% to 88%
-    else if (p >= 0.70 && p < 0.88) {
-      secRevealIntro.classList.remove("active");
-      secRevealFitment.classList.remove("active");
-      secArenaIntro.classList.remove("active");
-      secArenaTelemetry.classList.remove("active");
-      secStudioIntro.classList.remove("active");
-      secStudioSpecs.classList.add("active");
-      secCta.classList.remove("active");
-    }
-    // Final CTA: 88% to 100%
-    else {
-      secRevealIntro.classList.remove("active");
-      secRevealFitment.classList.remove("active");
-      secArenaIntro.classList.remove("active");
-      secArenaTelemetry.classList.remove("active");
-      secStudioIntro.classList.remove("active");
-      secStudioSpecs.classList.remove("active");
-      secCta.classList.add("active");
-    }
+    let nextIdx = 0;
+    if (p < 0.10) nextIdx = 0;
+    else if (p < 0.20) nextIdx = 1;
+    else if (p < 0.36) nextIdx = 2;
+    else if (p < 0.55) nextIdx = 3;
+    else if (p < 0.70) nextIdx = 4;
+    else if (p < 0.88) nextIdx = 5;
+    else nextIdx = 6;
+
+    if (nextIdx === activeSectionIdx) return;
+    activeSectionIdx = nextIdx;
+
+    storySections.forEach((sec, idx) => {
+      if (sec) {
+        if (idx === nextIdx) sec.classList.add("active");
+        else sec.classList.remove("active");
+      }
+    });
   }
 
   function initScrollExperience() {
@@ -403,18 +368,23 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.body) document.body.scrollTop = 0;
 
     const lenis = new Lenis({
-      duration: 0.85,
-      easing: (t) => 1 - Math.pow(1 - t, 3),
+      duration: 0.65,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.25
+      wheelMultiplier: 1.15
     });
 
     lenis.scrollTo(0, { immediate: true });
 
+    let lastVelocityText = "";
     lenis.on('scroll', (e) => {
       ScrollTrigger.update();
-      hudVelocity.textContent = Math.abs(e.velocity).toFixed(2);
+      const vStr = Math.abs(e.velocity).toFixed(2);
+      if (vStr !== lastVelocityText) {
+        lastVelocityText = vStr;
+        hudVelocity.textContent = vStr;
+      }
     });
 
     gsap.ticker.add((time) => {
@@ -424,6 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Master Scroll Progress
     const journey = { progress: 0 };
+    let lastProgressText = "";
 
     gsap.to(journey, {
       progress: 1,
@@ -432,14 +403,17 @@ document.addEventListener("DOMContentLoaded", () => {
         trigger: "#scroll-container",
         start: "top top",
         end: "bottom bottom",
-        scrub: 0.25,
+        scrub: true, // Instant 1:1 synchronization with smooth Lenis motion (zero double-lag)
         onUpdate: (self) => {
           const p = self.progress;
 
           // HUD progress bar
           const pct = (p * 100).toFixed(1);
-          hudProgress.style.width = `${pct}%`;
-          hudPercent.textContent = `${pct}%`;
+          if (pct !== lastProgressText) {
+            lastProgressText = pct;
+            hudProgress.style.width = `${pct}%`;
+            hudPercent.textContent = `${pct}%`;
+          }
 
           // Handle 3-sequence switching (Pure BMW M4 Showcase)
           if (p < 0.20) {
@@ -477,10 +451,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           }
 
-          // Draw current frame on canvas
+          // Draw current frame on canvas (skips redraw if frame index unchanged)
           renderCurrentState();
 
-          // Update active storyline text
+          // Update active storyline text (skips DOM changes if section unchanged)
           updateStorySections(p);
         }
       }
