@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE NEW BMW M4 COMPETITION // PURE M EXPERIENCE</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Syncopate:wght@700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css?v=7.8">
+</head>
+<body>
+
+  <!-- PRELOADER (Crystal Clear HD User Artwork + Pure M Ignition) -->
+  <div id="preloader">
+    <!-- User's Cinematic Artwork Container (Enhanced Crystal Clear HD 4K, Edge-Feathered Seamless Fullscreen) -->
+    <div class="preloader-artwork-wrap" id="preloaderArtworkWrap">
+      <img src="assets/bmw_beast_hd_vignette.jpg?v=4" alt="BMW M4 Competition" class="preloader-artwork-img" id="preloaderArtworkImg">
+    </div>
+
+    <!-- Interactive Telemetry HUD Layer (Positioned neatly in the lower wet tarmac, leaving BMW M4 COMPETITION completely clear) -->
+    <div class="preloader-ui-layer">
+      <!-- 1. Tap to awaken the beast prompt with Official BMW M Tri-Color Badge -->
+      <button class="preloader-action-hint" id="preloaderActionHint" title="Tap to awaken the beast & start sound">
+        <span class="hint-m-stripes">
+          <span class="hint-m-stripe hint-m-stripe-1"></span>
+          <span class="hint-m-stripe hint-m-stripe-2"></span>
+          <span class="hint-m-stripe hint-m-stripe-3"></span>
+        </span>
+        <span id="preloaderBtnText">TAP TO AWAKEN THE BEAST</span>
+      </button>
+
+      <!-- 2. Cockpit Telemetry Box: Inline Status & Counter + Glowing M Rail -->
+      <div class="preloader-telemetry-box">
+        <div class="telemetry-info-row">
+          <div class="preloader-status" id="preloaderStatus">
+            <span class="preloader-status-dot"></span>
+            <span id="preloaderStatusText">M POWER // 503 HP COLD START // TAP TO AWAKEN</span>
+          </div>
+          <div class="preloader-counter-wrap">
+            <span class="preloader-num" id="preloaderPercent">0</span><span class="preloader-pct">%</span>
+          </div>
+        </div>
+
+        <!-- 3. Glowing BMW M Progress Rail -->
+        <div class="preloader-bar-bg">
+          <div class="preloader-bar-fill" id="preloaderBar">
+            <div class="preloader-bar-glint"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BMW M COLD START & ACCELERATE AUDIO ENGINE (Active during Preloader) -->
+  <audio id="bmwLoaderAudio" preload="auto">
+    <source src="audio/bmw_drift_user.wav" type="audio/wav">
+    <source src="audio/bmw_drift_user.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- FIXED HEADER -->
+  <header class="bmw-header">
+    <div class="header-brand">
+      <svg class="bmw-roundel" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="48" fill="#000" stroke="#fff" stroke-width="4"/>
+        <path d="M50,15 A35,35 0 0,1 85,50 L50,50 Z" fill="#0066b1"/>
+        <path d="M85,50 A35,35 0 0,1 50,85 L50,50 Z" fill="#ffffff"/>
+        <path d="M50,85 A35,35 0 0,1 15,50 L50,50 Z" fill="#0066b1"/>
+        <path d="M15,50 A35,35 0 0,1 50,15 L50,50 Z" fill="#ffffff"/>
+        <circle cx="50" cy="50" r="35" fill="none" stroke="#000" stroke-width="2"/>
+      </svg>
+
+      <div class="brand-m-badge">
+        <div class="mini-m-stripes">
+          <div class="mini-stripe" style="background: var(--bmw-m-cyan);"></div>
+          <div class="mini-stripe" style="background: var(--bmw-m-blue);"></div>
+          <div class="mini-stripe" style="background: var(--bmw-m-red);"></div>
+        </div>
+        <span class="m-text">M4</span>
+      </div>
+
+      <span class="header-model">COMPETITION // M4 EXPERIENCE</span>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-header btn-cta" onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})">
+        ORDER NOW
+      </button>
+    </div>
+  </header>
+
+  <!-- PINNED CANVAS CONTAINER -->
+  <div class="canvas-sticky-container">
+    <canvas id="car-canvas"></canvas>
+    <div class="canvas-overlay-vignette"></div>
+    <div id="transition-flash"></div>
+  </div>
+
+  <!-- STORYLINE OVERLAYS -->
+
+  <!-- ACT 1: CHAPTER I - THE MIDNIGHT REVEAL -->
+  <div class="story-section align-left active" id="sec-reveal-intro">
+    <div style="max-width: 750px;">
+      <div class="tagline-pill">CHAPTER 01 // THE MIDNIGHT REVEAL</div>
+      <h1 class="main-title">
+        BMW M4 <br>
+        <span class="ruby-accent-text">COMPETITION.</span>
+      </h1>
+      <p class="hero-description">
+        Emerging from underground shadows in custom candy ruby metallic. Camera tracking glides past concrete columns to unveil the aggressive silhouette.
+      </p>
+      <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--ruby-accent); margin-top: 1.5rem; letter-spacing: 2px;">
+        ↓ SCROLL TO REVEAL DETAILS
+      </div>
+    </div>
+  </div>
+
+  <!-- ACT 1: WHEEL & STANCE FITMENT -->
+  <div class="story-section align-right" id="sec-reveal-fitment">
+    <div class="glass-card">
+      <div class="tagline-pill" style="color: var(--ruby-accent);">STANCE & ILLUMINATION</div>
+      <h2 class="card-title">UNDERGROUND SPEC</h2>
+      
+      <div class="spec-list">
+        <div class="spec-row">
+          <span class="spec-name">WHEELS</span>
+          <span class="spec-val">19" BBS CONCAVE MESH</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-name">BRAKE PACKAGE</span>
+          <span class="spec-val" style="color: #f59e0b;">ACID YELLOW M CALIPERS</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-name">OPTICS</span>
+          <span class="spec-val">DTM CORONA ANGEL EYES</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-name">PAINT FINISH</span>
+          <span class="spec-val" style="color: var(--ruby-accent);">CANDY RUBY METALLIC</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACT 2: CHAPTER II - ARENA SMOKE & BURNOUT -->
+  <div class="story-section align-left" id="sec-arena-intro">
+    <div style="max-width: 750px;">
+      <div class="tagline-pill" style="color: var(--bmw-m-cyan); border-color: rgba(0, 128, 255, 0.4);">
+        CHAPTER 02 // ARENA SMOKE & BURNOUT
+      </div>
+      <h2 class="main-title">
+        S58 TWIN-TURBO. <br>
+        <span class="blue-accent-text">SMOKE & OVERSTEER.</span>
+      </h2>
+      <p class="hero-description">
+        Yas Marina Blue M4 charges onto the stadium tarmac. Aggressive high-angle drift entry followed by full rear burnout donut until billowing tire smoke fills the atmosphere.
+      </p>
+    </div>
+  </div>
+
+  <!-- ACT 2: ARENA CHASSIS & SMOKE TELEMETRY -->
+  <div class="story-section align-right" id="sec-arena-telemetry">
+    <div class="glass-card" style="border-color: rgba(0, 128, 255, 0.3);">
+      <div class="tagline-pill" style="color: var(--bmw-m-cyan);">ARENA DYNAMICS // STADIUM SPEC</div>
+      <h2 class="card-title">BURNOUT OVERDRIVE</h2>
+      
+      <div class="spec-grid">
+        <div class="spec-box">
+          <span class="spec-number" style="color: var(--bmw-m-cyan);">7,200</span>
+          <span class="spec-label" style="color: var(--bmw-m-cyan);">RPM REDLINE</span>
+        </div>
+        <div class="spec-box">
+          <span class="spec-number">3.0L</span>
+          <span class="spec-label">S58 TWIN-TURBO</span>
+        </div>
+        <div class="spec-box">
+          <span class="spec-number">1.30g</span>
+          <span class="spec-label">LATERAL DRIFT G</span>
+        </div>
+        <div class="spec-box">
+          <span class="spec-number">100%</span>
+          <span class="spec-label">M ACTIVE DIFF</span>
+        </div>
+      </div>
+
+      <div class="spec-list" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+        <div class="spec-row">
+          <span class="spec-name">TRACTION MODE</span>
+          <span class="spec-val" style="color: var(--bmw-m-cyan);">DSC OFF // M DYNAMIC MODE</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-name">EXHAUST SYSTEM</span>
+          <span class="spec-val">M PERFORMANCE VALVED TITANIUM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACT 3: CHAPTER 03 - 360° PRECISION DYNAMICS -->
+  <div class="story-section align-left" id="sec-studio-intro">
+    <div style="max-width: 750px;">
+      <div class="tagline-pill">CHAPTER 03 // 360° PRECISION DYNAMICS</div>
+      <h2 class="main-title">
+        TRACK BRED. <br>
+        <span class="accent-m">360° AERODYNAMICS.</span>
+      </h2>
+      <p class="hero-description">
+        Transitioning directly onto the studio turntable. Experience complete 360-degree aerodynamic sculpture powered by the 3.0L BMW M TwinPower Turbo inline-6.
+      </p>
+    </div>
+  </div>
+
+  <!-- ACT 2: 360° PERFORMANCE TELEMETRY -->
+  <div class="story-section align-right" id="sec-studio-specs">
+    <div class="glass-card">
+      <div class="tagline-pill">PERFORMANCE TELEMETRY</div>
+      <h2 class="card-title">ENGINEERED FOR THE LIMIT</h2>
+      
+      <div class="spec-grid">
+        <div class="spec-box">
+          <span class="spec-number">503</span>
+          <span class="spec-label">HORSEPOWER</span>
+        </div>
+        <div class="spec-box">
+          <span class="spec-number">3.4s</span>
+          <span class="spec-label">0 - 100 KM/H</span>
+        </div>
+        <div class="spec-box">
+          <span class="spec-number">650</span>
+          <span class="spec-label">NM TORQUE</span>
+        </div>
+        <div class="spec-box">
+          <span class="spec-number">290</span>
+          <span class="spec-label">KM/H TOP SPEED</span>
+        </div>
+      </div>
+
+      <div class="spec-list" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+        <div class="spec-row">
+          <span class="spec-name">ROOF</span>
+          <span class="spec-val">CARBON FIBRE REINFORCED</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-name">BRAKES</span>
+          <span class="spec-val">M CARBON CERAMIC</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACT 2: CALL TO ACTION -->
+  <div class="story-section align-center" id="sec-cta">
+    <div style="max-width: 700px; margin: 0 auto;">
+      <div class="tagline-pill" style="justify-content: center;">THE ULTIMATE DRIVING MACHINE</div>
+      <h2 class="main-title" style="font-size: clamp(2rem, 5vw, 3.8rem);">
+        YOUR JOURNEY <br>
+        <span class="accent-m">BEGINS NOW.</span>
+      </h2>
+      <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; margin-bottom: 2rem;">
+        Configure your bespoke BMW M4 Competition or schedule a track test drive.
+      </p>
+
+      <div class="cta-buttons" style="justify-content: center;">
+        <button class="btn-primary-m" onclick="alert('BMW M4 Customizer opening...')">
+          BUILD YOUR M4
+        </button>
+        <button class="btn-secondary-m" onclick="alert('Test drive request submitted!')">
+          BOOK TEST DRIVE
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLL VIRTUAL SPACER -->
+  <div id="scroll-container"></div>
+
+
+  <!-- BOTTOM TELEMETRY HUD -->
+  <div class="bottom-telemetry-hud">
+    <div>
+      <span>SEQUENCE: <strong class="hud-pill" id="hudChapter">CH-1: REVEAL (00/72)</strong></span>
+      <span style="margin-left: 1.5rem;">VELOCITY: <strong id="hudVelocity" style="color: var(--text-primary);">0.00</strong></span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <div class="scrub-progress-track">
+        <div class="scrub-progress-thumb" id="hudProgress"></div>
+      </div>
+      <span id="hudPercent">0.0%</span>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="main.js?v=7.8"></script>
+</body>
+</html>
